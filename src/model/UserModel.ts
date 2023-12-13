@@ -20,10 +20,10 @@ const userSchema = new Schema<TUser>({
   orders: [
     {
       productName: { type: String },
-      price: { type: String },
-      quantity: { type: String },
+      price: { type: Number },
+      quantity: { type: Number },
     },
   ],
 });
 
-export const UserModel = model<TUser>('user', userSchema);
+export const UserModel = model<TUser>("user", userSchema);
