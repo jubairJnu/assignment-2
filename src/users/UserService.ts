@@ -15,12 +15,13 @@ const getAllUsersFromDB = async () => {
 
 //get single user
 const getSingleUserFromDB = async (userId: string) => {
-  const result = await UserModel.findOne({ userId: userId }).select('-password');
+  const result = await UserModel.findOne({ userId: userId }).select(
+    "-password"
+  );
   return result;
 };
 
 //update a user
-
 const updateAUserIntoDB = async (
   userId: string,
   updatedUserData: TUser
@@ -39,6 +40,14 @@ const deleteUserFromDB = async (userId: string): Promise<TUser | null> => {
 };
 
 //orders----------
+const getUserOrderFromDB = async (userId: string) => {
+  const result = await UserModel.findOne({ userId: userId });
+  const data = {
+    orders: result?.orders,
+  };
+  return data;
+};
+
 const UpdateOrdersIntoDB = async (
   userId: string,
   updatedOrdersData: TOrder
@@ -63,4 +72,5 @@ export const UserService = {
   updateAUserIntoDB,
   deleteUserFromDB,
   UpdateOrdersIntoDB,
+  getUserOrderFromDB,
 };

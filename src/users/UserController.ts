@@ -145,6 +145,38 @@ const deleteUser = async (req: Request, res: Response) => {
 };
 
 //orders-----
+const getUserOrders = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const result = await UserService.getSingleUserFromDB(userId);
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+        error: {
+          code: 404,
+          description: "User not found!",
+        },
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Order fetched successfully!",
+      data: result.orders,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: {
+        code: 500,
+        description: "User not found!",
+      },
+    });
+  }
+};
+
 const UpdateOrders = async (req: Request, res: Response) => {
   try {
     const OrderData = req.body;
@@ -188,4 +220,5 @@ export const UserController = {
   UpdateAUser,
   deleteUser,
   UpdateOrders,
+  getUserOrders,
 };
