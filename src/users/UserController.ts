@@ -213,6 +213,59 @@ const UpdateOrders = async (req: Request, res: Response) => {
   }
 };
 
+//caculate total price
+
+const getTotalPrice = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const result = await UserService.calculateTotalPrice(userId);
+
+    if (result === null) {
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+        error: {
+          code: 404,
+          description: "User not found!",
+        },
+      });
+      return;
+    }
+
+    // handle no order
+
+    if (result === 0) {
+      res.status(400).json({
+        success: false,
+        message: "There are no orders for this user",
+        error: {
+          code: 400,
+          description: "There are no orders for this user",
+        },
+      });
+      return;
+    }
+    res.status(200).json({
+      success: true,
+      message: "Total price calculated successfully!",
+      data: {
+        totalPrice: result,
+      },
+    });
+  } catch (error) {
+    // Handle other errors
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: {
+        code: 500,
+        description: "Internal server error",
+      },
+    });
+  }
+};
+
+//export
 export const UserController = {
   createUser,
   getUsers,
@@ -221,4 +274,5 @@ export const UserController = {
   deleteUser,
   UpdateOrders,
   getUserOrders,
+  getTotalPrice,
 };

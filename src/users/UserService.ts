@@ -65,6 +65,22 @@ const UpdateOrdersIntoDB = async (
   return result;
 };
 
+//calculate totalPrice
+
+const calculateTotalPrice = async (userId: string) => {
+  const user = await UserModel.findOne({ userId: userId });
+  if (!user) {
+    return null;
+  }
+  //calculation
+
+  const totalPrice = user.orders.reduce((acc, order) => {
+    return acc + order.price * order.quantity;
+  }, 0);
+
+  return totalPrice;
+};
+
 export const UserService = {
   createUserIntoDB,
   getAllUsersFromDB,
@@ -73,4 +89,5 @@ export const UserService = {
   deleteUserFromDB,
   UpdateOrdersIntoDB,
   getUserOrderFromDB,
+  calculateTotalPrice,
 };
