@@ -9,7 +9,7 @@ const createUserIntoDB = async (user: TUser) => {
 //get all user
 
 const getAllUsersFromDB = async () => {
-  const result = await UserModel.find();
+  const result = await UserModel.find().select("-password");
   return result;
 };
 
@@ -30,7 +30,7 @@ const updateAUserIntoDB = async (
     { userId: userId }, // Use { userId: userId } instead of { userId: userId }
     updatedUserData,
     { new: true, runValidators: true }
-  );
+  ).select("-password");
   return result;
 };
 
@@ -56,11 +56,11 @@ const UpdateOrdersIntoDB = async (
     { userId: userId.toString() },
     {
       $push: {
-        orders: updatedOrdersData,
+        orders: { $each: updatedOrdersData },
       },
     },
     { new: true, runValidators: true }
-  );
+  ).select("-password");
 
   return result;
 };
