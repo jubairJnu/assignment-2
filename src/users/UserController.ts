@@ -1,17 +1,14 @@
 import { Request, Response } from "express";
 import { UserService } from "./UserService";
-import { TOrder } from "./UserInterface";
-import { z } from "zod";
+
 import userValidationSchema from "./UserZodValidation";
 
 const createUser = async (req: Request, res: Response) => {
   try {
     const userData = req.body;
-    
 
     //data validation using zod
-    const zodParseData = userValidationSchema.parse(userData)
-
+    const zodParseData = userValidationSchema.parse(userData);
 
     const result = await UserService.createUserIntoDB(zodParseData);
     res.status(200).json({
@@ -84,8 +81,6 @@ const UpdateAUser = async (req: Request, res: Response) => {
   try {
     const updatedUserData = req.body;
     const { userId } = req.params;
-    console.log(userId, updatedUserData);
-    console.log("req", req.body);
 
     const result = await UserService.updateAUserIntoDB(userId, updatedUserData);
     if (!result) {
@@ -121,7 +116,7 @@ const UpdateAUser = async (req: Request, res: Response) => {
 const deleteUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    console.log(userId);
+
     const result = await UserService.deleteUserFromDB(userId);
     if (!result) {
       return res.status(404).json({
@@ -188,8 +183,6 @@ const UpdateOrders = async (req: Request, res: Response) => {
   try {
     const OrderData = req.body;
     const { userId } = req.params;
-    console.log(userId, OrderData);
-    console.log("req", req.body);
 
     const result = await UserService.updateAUserIntoDB(userId, OrderData);
     if (!result) {

@@ -1,4 +1,4 @@
-import mongoose, { Schema, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import { TUser } from "../users/UserInterface";
 import bcrypt from "bcrypt";
 import config from "../app/config";
@@ -36,6 +36,7 @@ const userSchema = new Schema<TUser>(
 
 
 userSchema.pre("save", async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
   user.password = await bcrypt.hash(
     user.password,
