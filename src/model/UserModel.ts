@@ -1,5 +1,7 @@
 import mongoose, { Schema, model } from "mongoose";
 import { TUser } from "../users/UserInterface";
+import bcrypt from "bcrypt";
+import config from "../app/config";
 
 const userSchema = new Schema<TUser>({
   userId: { type: String, unique: true },
@@ -24,6 +26,16 @@ const userSchema = new Schema<TUser>({
       quantity: { type: Number },
     },
   ],
+});
+
+userSchema.pre("save", async function (next) {
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds)
+  );
+
+  next();
 });
 
 export const UserModel = model<TUser>("user", userSchema);

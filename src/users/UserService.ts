@@ -15,7 +15,7 @@ const getAllUsersFromDB = async () => {
 
 //get single user
 const getSingleUserFromDB = async (userId: string) => {
-  const result = await UserModel.findOne({ userId: userId });
+  const result = await UserModel.findOne({ userId: userId }).select('-password');
   return result;
 };
 
@@ -43,10 +43,13 @@ const UpdateOrdersIntoDB = async (
   userId: string,
   updatedOrdersData: TOrder
 ): Promise<TUser | null> => {
-  const result = await UserModel.findOneAndUpdate(
-    { userId: userId },
-    // Use { userId: userId } instead of { userId: userId }
-    { $push: { orders: updatedOrdersData } },
+  const result = await UserModel.findByIdAndUpdate(
+    { userId: userId.toString() },
+    {
+      $push: {
+        orders: { $each: updatedOrdersData },
+      },
+    },
     { new: true, runValidators: true }
   );
 
