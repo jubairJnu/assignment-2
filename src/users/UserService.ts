@@ -56,7 +56,7 @@ const UpdateOrdersIntoDB = async (
     { userId: userId.toString() },
     {
       $push: {
-        orders: { $each: updatedOrdersData },
+        orders: updatedOrdersData,
       },
     },
     { new: true, runValidators: true }
@@ -74,7 +74,7 @@ const calculateTotalPrice = async (userId: string) => {
   }
   //calculation
 
-  const totalPrice = user.orders.reduce((acc, order) => {
+  const totalPrice = user?.orders?.reduce((acc, order) => {
     return acc + order.price * order.quantity;
   }, 0);
 

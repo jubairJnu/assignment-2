@@ -15,6 +15,7 @@ const userSchema = new Schema<TUser>(
     age: { type: Number },
     email: { type: String },
     isActive: { type: Boolean },
+    hobbies: [{ type: String }],
     address: {
       street: { type: String },
       city: { type: String },
@@ -27,19 +28,12 @@ const userSchema = new Schema<TUser>(
         quantity: { type: Number },
       },
     ],
-  },
-  {
-    toJSON: {
-      virtuals: true,
-    },
   }
 );
 
 //virtual
 
-userSchema.virtual("totalPrice").get(function () {
-  return this.orders[0].quantity * this.orders[0].price;
-});
+
 
 userSchema.pre("save", async function (next) {
   const user = this;
